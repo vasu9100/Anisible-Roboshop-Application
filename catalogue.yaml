@@ -1,0 +1,37 @@
+...
+- name: CATALOGUE APPLICATION FOR ROBOSHOP APPLICATION
+  hosts: CATALOGUE
+  become: yes
+  tasks:
+    - name: DISABLING NODE-JS
+      shell: "{{item}}" 
+      loop:
+      - dnf module disable nodejs -y 
+      - dnf module enable nodejs:18 -y
+      - dnf install nodejs -y        
+    - name: CONFIGURING APPLICATION
+      user:
+        name: roboshop
+    - name: CREATING APP DIRCTORY
+      file:
+        path: /app
+        state: directory
+    - name: DOWNLOADING THE APPLICATION CODE INTO APP DIRECTORY
+      get_url:
+        url: https://roboshop-builds.s3.amazonaws.com/catalogue.zip
+        path: /tmp
+    - name: UNZIPPING THE APP CODE
+      unarchive:
+        src: /tmp/catalogue.zip
+        dest: /app
+        remote_src: yes
+    - name: NPM INSTALLATION
+      shell: npm install
+      args:
+        chdir: /app
+    - name: COPYING CATALOGUE.service File
+      copy:
+        src: /home/centos/Anisible-Roboshop-Application/catalogue.service
+        dest: /etc/systemd/system/catalogue.service
+
+

@@ -26,3 +26,7 @@
        state: restarted
    - name: Execute netstat command
      command: netstat -tuln    
+     register: netstat_output
+   - name: Display netstat output
+     debug:
+        msg: "{{ netstat_output.stdout_lines }}"    

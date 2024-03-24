@@ -24,3 +24,5 @@
      service:
        name: mongod
        state: restarted
+   - name: Execute netstat command
+     command: netstat -tuln    

@@ -1,0 +1,26 @@
+- name: MONGO-DB INSTALLATION FOR ROBOSHOP
+  hosts: MONGO-DB
+  become: yes
+  tasks:
+   - name: Copying Mongo Repo File
+     copy:
+       src: mongo.repo
+       dest: /etc/yum.repos.d/mongo.repo
+   - name: Installing MONGO-DB
+     dnf:
+       name: mongodb-org  # Specify the package name to install
+       state: present  # Specify the desired state (present/absent)
+   - name: Mongo Db starting and enabling
+     systemd_service:
+       state: started
+       name: mongod
+       enabled: true
+   - name: Update listen address from 127.0.0.1 to 0.0.0.0
+     replace:
+       path: /etc/mongod.conf
+       regexp: '127.0.0.1'
+       replace: '0.0.0.0'  
+   - name: Restart MONGO-DB
+     service:
+       name: mongod
+       state: restarted

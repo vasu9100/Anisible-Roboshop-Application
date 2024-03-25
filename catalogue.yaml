@@ -53,5 +53,13 @@
       register: product_count
     - name: priniting product count
       debug:
-        msg: "product_count: {{product_count}}"    
+        msg: "product_count: {{product_count}}"
+    - name: loading data into mongodb-org
+      shell: mongo --host mongo.gonepudirobot.online < /app/schema/catalogue.js
+      when: product_count.stdout == "0"
+    - name: Restart catalogue
+      systemd_service:
+        name: catalogue
+        state: restarted
+             
 

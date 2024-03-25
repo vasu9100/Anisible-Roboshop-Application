@@ -5,9 +5,7 @@
 
   tasks:
     - name: DISABLING NODE.JS MODULE
-      shell:
-        name: "{{ item }}"
-        state: 
+      shell: 
       loop:
         - dnf module disable nodejs -y
         - dnf module enable nodejs:18 -y

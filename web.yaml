@@ -35,6 +35,7 @@
       copy:
         src: /usr/share/nginx/html/
         dest: /tmp/backup_html_{{current_time_result}}
+      remote_src: yes  
       ignore_errors: yes  
 
     - name: remove-old html content

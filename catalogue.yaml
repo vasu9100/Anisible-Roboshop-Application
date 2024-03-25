@@ -5,14 +5,13 @@
 
   tasks:
     - name: DISABLING NODE.JS MODULE
-      dnf:
+      shell:
         name: "{{ item }}"
-        state: "{{ 'disabled' if item == 'nodejs' else 'enabled' }}"
+        state: 
       loop:
-        - nodejs
-        - nodejs:18
-      vars:
-        ansible_become: yes
+        - dnf module disable nodejs -y
+        - dnf module enable nodejs:18 -y
+        - dnf install nodejs -y
 
     - name: CONFIGURE APPLICATION USER
       user:

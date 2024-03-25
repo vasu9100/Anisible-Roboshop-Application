@@ -28,13 +28,13 @@
 
     - name: Create backup folder
       file:
-        path: /tmp/backup_html_{{current_time}}
+        path: /tmp/backup_html_{{current_time_result}}
         state: directory
     
     - name: copy html-folder for backup
       copy:
         src: /usr/share/nginx/html/
-        dest: /tmp/backup_html_{{current_time}}
+        dest: /tmp/backup_html_{{current_time_result}}
       ignore_errors: yes  
 
     - name: remove-old html content

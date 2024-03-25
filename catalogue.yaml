@@ -1,65 +1,86 @@
 ---
-- name: CATALOGUE APPLICATION FOR ROBOSHOP APPLICATION
+- name: CATALOGUE APPLICATION FOR ROBOSHOP
   hosts: CATALOGUE
   become: yes
+
   tasks:
-    - name: DISABLING NODE-JS
-      shell: "{{item}}" 
+    - name: DISABLING NODE.JS MODULE
+      dnf:
+        name: "{{ item }}"
+        state: "{{ 'disabled' if item == 'nodejs' else 'enabled' }}"
       loop:
-      - dnf module disable nodejs -y 
-      - dnf module enable nodejs:18 -y
-      - dnf install nodejs -y        
-    - name: CONFIGURING APPLICATION
+        - nodejs
+        - nodejs:18
+      vars:
+        ansible_become: yes
+
+    - name: CONFIGURE APPLICATION USER
       user:
         name: roboshop
-    - name: CREATING APP DIRCTORY
+
+    - name: Create a directory if it does not exist
+      ansible.builtin.file:
+        path: /app
+        state: absent
+    
+    - name: CREATE APP DIRECTORY
       file:
         path: /app
         state: directory
-    - name: DOWNLOADING THE APPLICATION CODE INTO APP DIRECTORY
+
+    - name: DOWNLOAD APPLICATION CODE INTO APP DIRECTORY
       get_url:
         url: https://roboshop-builds.s3.amazonaws.com/catalogue.zip
         dest: /tmp
-    - name: UNZIPPING THE APP CODE
+
+    - name: UNZIP APP CODE
       unarchive:
         src: /tmp/catalogue.zip
         dest: /app
         remote_src: yes
-    - name: NPM INSTALLATION
+
+    - name: INSTALL NPM DEPENDENCIES
       shell: npm install
       args:
         chdir: /app
-    - name: COPYING CATALOGUE.service File
+
+    - name: COPY CATALOGUE SERVICE FILE
       copy:
         src: /home/centos/Anisible-Roboshop-Application/catalogue.service
         dest: /etc/systemd/system/catalogue.service
-    - name: deamon realod and start
-      ansible.builtin.systemd_service:
-        daemon_reload: true
-    - name: deamon realod and start
-      ansible.builtin.systemd_service:
+
+    - name: RELOAD SYSTEMD DAEMON
+      ansible.builtin.systemd:
+        daemon_reexec: yes
+
+    - name: START CATALOGUE SERVICE
+      ansible.builtin.systemd:
         name: catalogue
-        state: started   
-    - name: Copying Mongo Repo File
+        state: started
+
+    - name: COPY MONGO REPO FILE
       copy:
         src: mongo.repo
         dest: /etc/yum.repos.d/mongo.repo
-    - name: mongo-org-shell Installing
+
+    - name: INSTALL MONGODB SHELL
       dnf:
         name: mongodb-org-shell
         state: present
-    - name: Verify products are there not
+
+    - name: VERIFY PRODUCTS COUNT
       command: mongo --host mongo.gonepudirobot.online --quiet --eval 'db = db.getSiblingDB("catalogue"); db.products.count()'
       register: product_count
-    - name: priniting product count
+
+    - name: PRINT PRODUCT COUNT
       debug:
-        msg: "product_count: {{product_count}}"
-    - name: loading data into mongodb-org
+        msg: "Product Count: {{ product_count.stdout }}"
+
+    - name: LOAD DATA INTO MONGODB
       shell: mongo --host mongo.gonepudirobot.online < /app/schema/catalogue.js
       when: product_count.stdout == "0"
-    - name: Restart catalogue
-      systemd_service:
+
+    - name: RESTART CATALOGUE SERVICE
+      systemd:
         name: catalogue
         state: restarted
-             
-

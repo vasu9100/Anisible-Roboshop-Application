@@ -32,4 +32,4 @@
 
     - name: print redis output
       debug:
-        msg: "redis port status: {{redis_output.stdout_lines}}"      
+        msg: "{{ redis_output.stdout_lines }}"      

@@ -53,5 +53,5 @@
       register: product_count
     - name: priniting product count
       debug:
-        msg: "product_count: {{producr_count}}"    
+        msg: "product_count: {{product_count}}"    
 

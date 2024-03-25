@@ -35,7 +35,11 @@
         dest: /etc/systemd/system/catalogue.service
     - name: deamon realod and start
       ansible.builtin.systemd_service:
-        daemon_reload: true  
+        daemon_reload: true
+    - name: deamon realod and start
+      ansible.builtin.systemd_service:
+        name: catalogue
+        state: started   
     - name: Copying Mongo Repo File
       copy:
         src: mongo.repo
@@ -45,7 +49,7 @@
         name: mongodb-org-shell
         state: present
     - name: Verify products are there not
-      shell: mongo --host mongodb.daws76s.online --quiet --eval 'db = db.getSiblingDB("catalogue"); db.products.count()'
+      command: mongo --host mongodb.daws76s.online --quiet --eval 'db = db.getSiblingDB("catalogue"); db.products.count()'
       register: product_count
     - name: priniting product count
       debug:

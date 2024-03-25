@@ -36,6 +36,10 @@
     - name: deamon realod and start
       ansible.builtin.systemd_service:
         daemon_reload: true  
+    - name: Copying Mongo Repo File
+      copy:
+        src: mongo.repo
+        dest: /etc/yum.repos.d/mongo.repo
     - name: mongo-org-shell Installing
       dnf:
         name: mongodb-org-shell

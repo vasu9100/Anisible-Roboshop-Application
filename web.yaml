@@ -22,8 +22,9 @@
         enabled: true
 
     - name: Download Frontend CODE
-      get_url: https://roboshop-builds.s3.amazonaws.com/web.zip
-      dest: /tmp      
+      get_url:
+        url: https://roboshop-builds.s3.amazonaws.com/web.zip
+        dest: /tmp    
 
     - name: Create backup folder
       file:
@@ -54,7 +55,7 @@
       service:
         name: ngnix
         state: restarted
-            
+
 
 
 

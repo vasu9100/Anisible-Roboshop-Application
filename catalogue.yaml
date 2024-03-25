@@ -19,7 +19,7 @@
     - name: DOWNLOADING THE APPLICATION CODE INTO APP DIRECTORY
       get_url:
         url: https://roboshop-builds.s3.amazonaws.com/catalogue.zip
-        path: /tmp
+        dest: /tmp
     - name: UNZIPPING THE APP CODE
       unarchive:
         src: /tmp/catalogue.zip

@@ -1,0 +1,61 @@
+---
+- name: INSTALLING NGNIX SERVER FOR ROBOSHOP
+  hosts: WEB
+  become: yes
+  tasks:
+    - name: INSTALLING NGNIX SERVER
+      dnf:
+        name: NGNIX
+        state: present
+    
+    - name: Set start time
+      ansible.builtin.shell: date +%Y-%m-%d_%H-%M-%S
+      register: current_time_result
+    # - name: set-backup-folder-time-frame
+    #   set_fact:
+    #     current_time: {{current_time_result.stdout}}
+    
+    - name: Enable and start NGNIX
+      service:
+        name: NGNIX
+        state: started
+        enabled: true
+
+    - name: Download Frontend CODE
+      get_url: https://roboshop-builds.s3.amazonaws.com/web.zip
+      dest: /tmp      
+
+    - name: Create backup folder
+      file:
+        path: /tmp/backup_html_{{current_time}}
+        state: directory
+    
+    - name: copy html-folder for backup
+      copy:
+        src: /usr/share/nginx/html/
+        dest: /tmp/backup_html_{{current_time}}
+      ignore_errors: yes  
+
+    - name: remove-old html content
+      shell: rm -rf /usr/share/nginx/html/*
+
+    - name: Extract New HTML CODE
+      unarchive:
+        src: /tmp/web.zip
+        dest: /usr/share/nginx/html/
+        remote_src: yes
+    
+    - name: Copy Main Conf file
+      copy:
+        src: roboshop.conf
+        dest: /etc/nginx/default.d/roboshop.conf
+
+    - name: NGNIX SERVER restarted
+      service:
+        name: ngnix
+        state: restarted
+            
+
+
+
+

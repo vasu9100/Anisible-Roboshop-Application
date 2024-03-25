@@ -1,4 +1,4 @@
-...
+---
 - name: CATALOGUE APPLICATION FOR ROBOSHOP APPLICATION
   hosts: CATALOGUE
   become: yes

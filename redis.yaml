@@ -25,4 +25,11 @@
         name: redis
         state: started
         enabled: yes
-                 
+
+    - name: print network output
+      shell: netstat -tuln
+      register: redis_output
+
+    - name: print redis output
+      debug:
+        msg: "redis port status: {{redis_output.stdout}}"      

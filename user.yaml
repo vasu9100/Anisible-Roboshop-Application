@@ -66,12 +66,12 @@
         state: present
 
     - name: VERIFY USER COUNT
-      command: mongo --host mongo.gonepudirobot.online --quiet --eval 'db = db.getSiblingDB("user"); db.products.count()'
-      register: product_count
+      command: mongo --host mongo.gonepudirobot.online --quiet --eval 'db = db.getSiblingDB("user"); db.user.count()'
+      register: user_count
 
     - name: PRINT USER COUNT
       debug:
-        msg: "user Count: {{ product_count.stdout }}"
+        msg: "user Count: {{ user_count.stdout }}"
 
     - name: LOAD DATA INTO MONGODB
       shell: mongo --host mongo.gonepudirobot.online < /app/schema/user.js

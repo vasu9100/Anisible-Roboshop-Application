@@ -33,10 +33,9 @@
       copy:
         src: /home/centos/Anisible-Roboshop-Application/catalogue.service
         dest: /etc/systemd/system/catalogue.service
-    - name: Reload daemon
-      service:
-        state: restarted
-        daemon_reload: true    
+    - name: deamon realod and start
+      ansible.builtin.systemd_service:
+        daemon_reload: true  
     - name: mongo-org-shell Installing
       dnf:
         name: mongodb-org-shell

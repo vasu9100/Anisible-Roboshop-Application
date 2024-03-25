@@ -28,7 +28,7 @@
 
     - name: Create backup folder
       file:
-        path: /tmp/backup_html_{{current_time_result}}
+        path: /tmp/backup_{{current_time_result}}
         state: directory
     
     - name: copy html-folder for backup

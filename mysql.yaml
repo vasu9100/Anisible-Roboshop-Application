@@ -10,11 +10,13 @@
 
     - name:  COPYING MYSQL REPO
       copy:
-        src: mongo.repo
+        src: mysql.repo
         dest: /etc/yum.repos.d/mysql.repo
 
     - name: install mysql server
-      shell: dnf install mysql-community-server -y
+      dnf:
+        name: mysql-community-server
+        state: present
 
     - name: START and Enabling MYSQL
       service:

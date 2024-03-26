@@ -35,12 +35,12 @@
         remote_src: yes
 
     - name: INSTALL MAVEN PACAKAGES
-      args:
-        chdir: /app
       shell: {{ item }}
       loop:
       - mvn clean package
       - mv target/shipping-1.0.jar shipping.jar
+      args:
+        chdir: /app
       
 
     - name: COPY SHIPPING SERVICE FILE

@@ -2,7 +2,8 @@
 - name: SHIPPING APPLICATION FOR ROBOSHOP
   hosts: SHIPPING
   become: yes
-  MYSQL_PASS: "RoboShop@1"
+  vars:
+    MYSQL_PASS: "RoboShop@1"
   tasks:
     - name: INSTALLAING MAVEN
       dnf:

@@ -13,8 +13,8 @@
         src: mongo.repo
         dest: /etc/yum.repos.d/mysql.repo
 
-    - name: INSTALLING MY SQL
-      package:
+    - name: install mysql server
+      ansible.builtin.package:
         name: mysql-community-server
         state: present
 

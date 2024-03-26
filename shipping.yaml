@@ -67,7 +67,7 @@
 
     - name: PRINT CITIES COUNT
       debug:
-        msg: {{CITIES_INFO.stdout}}  
+        msg: "{{CITIES_INFO.stdout}}"
 
     - name: LOAD THE DATA WHEN CITIES COUNT ZERO
       shell: "mysql -h mysql.gonepudirobot.online -uroot -p{{MYSQL_PASS}} < /app/schema/shipping.sql" 

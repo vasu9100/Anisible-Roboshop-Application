@@ -64,7 +64,7 @@
         state: present
 
     - name: CHECKING CITIES INFO
-      shell: " mysql -h mysql.daws76s.online -uroot -p{{mysql_password}} -sN -e "SELECT COUNT(*) FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME = 'cities'"
+      shell: mysql -h mysql.daws76s.online -uroot -p{{mysql_password}} -sN -e "SELECT COUNT(*) FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME = 'cities'
       register: CITIES_INFO
 
     - name: PRINT CITIES COUNT

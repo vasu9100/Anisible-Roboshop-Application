@@ -2,7 +2,7 @@
 - name: SHIPPING APPLICATION FOR ROBOSHOP
   hosts: SHIPPING
   become: yes
-
+  MYSQL_PASS: "RoboShop@1"
   tasks:
     - name: INSTALLAING MAVEN
       dnf:
@@ -57,7 +57,25 @@
         name: shipping
         state: started
 
+    - name: MYSQL INSTALLAING 
+      dnf:
+        name: mysql
+        state: present
+
+    - name: CHECKING CITIES INFO
+      shell: "mysql -h mysql.gonepudirobot.online -uroot -p{{MYSQL_PASS}}  < /app/schema/shipping.sql"
+      register: CITIES_INFO
+
+    - name: PRINT CITIES COUNT
+      debug:
+        msg: {{CITIES_INFO.stdout}}  
+
+    - name: LOAD THE DATA WHEN CITIES COUNT ZERO
+      shell: "mysql -h mysql.gonepudirobot.online -uroot -p{{MYSQL_PASS}} < /app/schema/shipping.sql" 
+      when: CITIES_INFO.stdout == "0"       
+
     - name: RESTART SHIPPING SERVICE
       systemd:
         name: shipping
         state: restarted
+

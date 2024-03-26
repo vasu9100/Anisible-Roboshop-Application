@@ -5,7 +5,7 @@
   vars:
     MYSQL_PASS: "RoboShop@1"
   tasks:
-    - name: INSTALLAING MAVEN
+    - name: INSTALLING MAVEN
       dnf:
         name: maven
         state: present
@@ -14,11 +14,6 @@
       user:
         name: roboshop
 
-    - name: Create a directory if it does not exist
-      ansible.builtin.file:
-        path: /app
-        state: absent
-    
     - name: CREATE APP DIRECTORY
       file:
         path: /app
@@ -35,14 +30,13 @@
         dest: /app
         remote_src: yes
 
-    - name: INSTALL MAVEN PACAKAGES
-      shell: "{{item}}"
+    - name: INSTALL MAVEN PACKAGES
+      shell: "{{ item }}"
       loop:
-      - mvn clean package
-      - mv target/shipping-1.0.jar shipping.jar
+        - mvn clean package
+        - mv target/shipping-1.0.jar shipping.jar
       args:
         chdir: /app
-      
 
     - name: COPY SHIPPING SERVICE FILE
       copy:
@@ -50,33 +44,32 @@
         dest: /etc/systemd/system/shipping.service
 
     - name: RELOAD SYSTEMD DAEMON
-      ansible.builtin.systemd:
+      systemd:
         daemon_reexec: yes
 
     - name: START SHIPPING SERVICE
-      ansible.builtin.systemd:
+      systemd:
         name: shipping
         state: started
 
-    - name: MYSQL INSTALLAING 
+    - name: MYSQL INSTALLATION
       dnf:
         name: mysql
         state: present
 
     - name: CHECKING CITIES INFO
-      shell: mysql -h mysql.gonepudirobot.online -uroot -p{{MYSQL_PASS}} -sN -e "SELECT COUNT(*) FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME = 'cities'
+      shell: "mysql -h mysql.gonepudirobot.online -uroot -p'{{ MYSQL_PASS }}' -sN -e 'SELECT COUNT(*) FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME = ''cities'';'"
       register: CITIES_INFO
 
     - name: PRINT CITIES COUNT
       debug:
-        msg: "{{CITIES_INFO.stdout}}"
+        msg: "{{ CITIES_INFO.stdout }}"
 
     - name: LOAD THE DATA WHEN CITIES COUNT ZERO
-      shell: "mysql -h mysql.gonepudirobot.online -uroot -p{{MYSQL_PASS}} < /app/schema/shipping.sql" 
-      when: CITIES_INFO.stdout == "0"       
+      shell: "mysql -h mysql.gonepudirobot.online -uroot -p'{{ MYSQL_PASS }}' < /app/schema/shipping.sql"
+      when: CITIES_INFO.stdout == "0"
 
     - name: RESTART SHIPPING SERVICE
       systemd:
         name: shipping
         state: restarted
-

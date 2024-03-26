@@ -27,5 +27,4 @@
     - name: CHANGING PASSWORD OF MYSQL
       shell: "{{item}}"
       loop:
-      - mysql_secure_installation --set-root-pass {{ MYSQL_PASS }}
-      - mysql -uroot -pRoboShop@1      
+      - mysql_secure_installation --set-root-pass {{ MYSQL_PASS }}      

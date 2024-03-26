@@ -57,17 +57,17 @@
         name: mysql
         state: present
 
-    - name: CHECKING CITIES INFO
-      shell: "mysql -h mysql.gonepudirobot.online -uroot -p'{{ MYSQL_PASS }}' -sN -e 'SELECT COUNT(*) FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME = ''cities'';'"
-      register: CITIES_INFO
+    - name: check cities schema exists or not
+      ansible.builtin.command:  mysql -h mysql.gonepudirobot.online -uroot -p{{ MYSQL_PASS }} -sN -e "SELECT COUNT(*) FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME = 'cities'"
+      register: schema
 
-    - name: PRINT CITIES COUNT
-      debug:
-        msg: "{{ CITIES_INFO.stdout }}"
+    - name: print output
+      ansible.builtin.debug:
+      msg: "schema output: {{schema}}"
 
-    - name: LOAD THE DATA WHEN CITIES COUNT ZERO
-      shell: "mysql -h mysql.gonepudirobot.online -uroot -p'{{ MYSQL_PASS }}' < /app/schema/shipping.sql"
-      when: CITIES_INFO.stdout == "0"
+    - name: load cities data
+      ansible.builtin.shell: "mysql -h mysql.gonepudirobot.online -uroot -p{{ MYSQL_PASS }}  < /app/schema/shipping.sql"
+      when: schema.stdout != "1"
 
     - name: RESTART SHIPPING SERVICE
       systemd:

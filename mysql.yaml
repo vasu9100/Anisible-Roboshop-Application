@@ -14,7 +14,7 @@
         dest: /etc/yum.repos.d/mysql.repo
 
     - name: INSTALLING MY SQL
-      dnf:
+      package:
         name: mysql-community-server
         state: present
 

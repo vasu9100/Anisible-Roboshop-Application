@@ -35,7 +35,7 @@
         remote_src: yes
 
     - name: INSTALL MAVEN PACAKAGES
-      shell: {{ item }}
+      shell: "{{item}}"
       loop:
       - cd /app
       - mvn clean package

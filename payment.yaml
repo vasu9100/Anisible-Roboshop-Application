@@ -45,7 +45,10 @@
     - name: COPYING SERVICE FILE
       copy:
         src: payment.service
-        dest: /etc/systemd/system/payment.service    
+        dest: /etc/systemd/system/payment.service
+    - name: UNMASK PAYMENT SERVICE
+      command: systemctl unmask payment.service
+      ignore_errors: true      
 
     - name: DAEMON RELOAD 
       systemd:

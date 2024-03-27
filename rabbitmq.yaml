@@ -2,7 +2,7 @@
 - name: INSTALLATIN RABBITMQ
 - hosts: RABBITMQ
   become: yes
-  var_files:
+  vars:
     roboshop_user: roboshop
     roboshop_pass: roboshop123
   tasks:

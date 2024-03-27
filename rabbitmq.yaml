@@ -9,8 +9,8 @@
     - name: INSTALLING RABBITMQ
       shell: "{{ item }}"
       loop:
-      - "https://packagecloud.io/install/repositories/rabbitmq/erlang/script.rpm.sh | bash"
-      - "https://packagecloud.io/install/repositories/rabbitmq/rabbitmq-server/script.rpm.sh | bash"
+      - "curl -s https://packagecloud.io/install/repositories/rabbitmq/erlang/script.rpm.sh | bash"
+      - "curl -s https://packagecloud.io/install/repositories/rabbitmq/rabbitmq-server/script.rpm.sh | bash"
       - dnf install rabbitmq-server -y
 
     - name: ENABE AND START RABBITMQ

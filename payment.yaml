@@ -54,5 +54,5 @@
     - name: STARTE AND ENABLE THE PAYMENT
       systemd:
         name: payment
-        state: started
+        state: restarted
         enabled: true

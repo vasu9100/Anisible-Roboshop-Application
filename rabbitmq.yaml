@@ -1,0 +1,26 @@
+---
+- name: INSTALLATIN RABBITMQ
+- hosts: RABBITMQ
+  become: yes
+  var_files:
+    roboshop_user: roboshop
+    roboshop_pass: roboshop123
+  tasks:
+    - name: INSTALLING RABBITMQ
+      shell: "{{ item }}"
+      loop:
+      - "https://packagecloud.io/install/repositories/rabbitmq/erlang/script.rpm.sh | bash"
+      - "https://packagecloud.io/install/repositories/rabbitmq/rabbitmq-server/script.rpm.sh | bash"
+      - dnf install rabbitmq-server -y
+
+    - name: ENABE AND START RABBITMQ
+      service:
+        name: rabbitmq-server
+        state: started
+        enabled: true
+
+    - name: ROBOSHOP USER CREATION
+      shell: "{{ item }}" 
+      loop:
+      - "rabbitmqctl add_user {{roboshop_user}} {{roboshop_pass}}"
+      - rabbitmqctl set_permissions -p / {{roboshop_user}} ".*" ".*" ".*"     

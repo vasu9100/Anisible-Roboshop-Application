@@ -1,6 +1,6 @@
 ---
 - name: INSTALLATIN RABBITMQ
-- hosts: RABBITMQ
+  hosts: RABBITMQ
   become: yes
   vars:
     roboshop_user: roboshop

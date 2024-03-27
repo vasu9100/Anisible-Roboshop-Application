@@ -48,11 +48,11 @@
         dest: /etc/systemd/system/payment.service    
 
     - name: DAEMON RELOAD 
-      service:
+      systemd:
         daemon_reexec: yes  
 
     - name: STARTE AND ENABLE THE PAYMENT
-      service:
+      systemd:
         name: payment
         state: started
         enabled: true
